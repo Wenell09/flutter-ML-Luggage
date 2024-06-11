@@ -68,23 +68,7 @@ class HomeView extends GetView<HomeController> {
                         child: TextField(
                           controller: controller.inputType[index],
                           onChanged: (value) {
-                            if (value.toLowerCase() == "backpack") {
-                              controller.typeBackpack[index].value = 1;
-                              controller.typeDuffel[index].value = 0;
-                              controller.typeSuitcase[index].value = 0;
-                            } else if (value.toLowerCase() == "duffel") {
-                              controller.typeBackpack[index].value = 0;
-                              controller.typeDuffel[index].value = 1;
-                              controller.typeSuitcase[index].value = 0;
-                            } else if (value.toLowerCase() == "suitcase") {
-                              controller.typeBackpack[index].value = 0;
-                              controller.typeDuffel[index].value = 0;
-                              controller.typeSuitcase[index].value = 1;
-                            } else {
-                              controller.typeBackpack[index].value = 0;
-                              controller.typeDuffel[index].value = 0;
-                              controller.typeSuitcase[index].value = 0;
-                            }
+                            controller.validasiTipeBarang(value, index);
                           },
                           keyboardType: TextInputType.name,
                           decoration: const InputDecoration(
@@ -101,21 +85,10 @@ class HomeView extends GetView<HomeController> {
             ),
             InkWell(
               onTap: () {
-                List<Map<String, dynamic>> items = [];
                 for (int i = 0; i < controller.numberOfItems.value; i++) {
-                  items.add({
-                    'length': int.parse(controller.inputLength[i].text),
-                    'width': int.parse(controller.inputWidth[i].text),
-                    'height': int.parse(controller.inputHeight[i].text),
-                    'type_backpack': controller.typeBackpack[i].value,
-                    'type_duffel': controller.typeDuffel[i].value,
-                    'type_suitcase': controller.typeSuitcase[i].value,
-                    'volume': int.parse(controller.inputLength[i].text) *
-                        int.parse(controller.inputWidth[i].text) *
-                        int.parse(controller.inputHeight[i].text),
-                  });
+                  controller.validasiDanInputBarang(i);
                 }
-                controller.predictWeight(items);
+                controller.predictWeight(controller.items);
                 Navigator.of(context).pushNamed(Routes.HASIL);
               },
               highlightColor: Colors.transparent,
@@ -151,7 +124,7 @@ class HomeView extends GetView<HomeController> {
             const SizedBox(height: 20),
             InkWell(
               onTap: () {
-                controller.addItem();
+                controller.penambahanBarang();
               },
               highlightColor: Colors.transparent,
               hoverColor: Colors.transparent,

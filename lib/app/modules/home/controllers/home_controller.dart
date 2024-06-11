@@ -15,6 +15,7 @@ class HomeController extends GetxController {
   var isLoading = true.obs;
   var volume = 0.obs;
   var data = [].obs;
+  List<Map<String, dynamic>> items = [];
 
   Future<void> predictWeight(List<Map<String, dynamic>> items) async {
     final url = Uri.parse('http://127.0.0.1:5000/predict_weight');
@@ -31,7 +32,32 @@ class HomeController extends GetxController {
     }
   }
 
-  void addItem() {
+  void validasiDanInputBarang(int i) {
+    if (inputLength[i].text.isEmpty &&
+        inputWidth[i].text.isEmpty &&
+        inputHeight[i].text.isEmpty &&
+        inputType[i].text.isEmpty) {
+      Get.snackbar("Error", "Semua field wajib diisi!");
+    } else {
+      inputBarang(i);
+    }
+  }
+
+  void inputBarang(int i) {
+    items.add({
+      'length': int.parse(inputLength[i].text),
+      'width': int.parse(inputWidth[i].text),
+      'height': int.parse(inputHeight[i].text),
+      'type_backpack': typeBackpack[i].value,
+      'type_duffel': typeDuffel[i].value,
+      'type_suitcase': typeSuitcase[i].value,
+      'volume': int.parse(inputLength[i].text) *
+          int.parse(inputWidth[i].text) *
+          int.parse(inputHeight[i].text),
+    });
+  }
+
+  void penambahanBarang() {
     numberOfItems.value++;
     inputLength.add(TextEditingController());
     inputWidth.add(TextEditingController());
@@ -43,9 +69,29 @@ class HomeController extends GetxController {
     numberOfItems.value = inputLength.length;
   }
 
+  void validasiTipeBarang(String value, int index) {
+    if (value.toLowerCase() == "backpack") {
+      typeBackpack[index].value = 1;
+      typeDuffel[index].value = 0;
+      typeSuitcase[index].value = 0;
+    } else if (value.toLowerCase() == "duffel") {
+      typeBackpack[index].value = 0;
+      typeDuffel[index].value = 1;
+      typeSuitcase[index].value = 0;
+    } else if (value.toLowerCase() == "suitcase") {
+      typeBackpack[index].value = 0;
+      typeDuffel[index].value = 0;
+      typeSuitcase[index].value = 1;
+    } else {
+      typeBackpack[index].value = 0;
+      typeDuffel[index].value = 0;
+      typeSuitcase[index].value = 0;
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
-    addItem();
+    penambahanBarang();
   }
 }
