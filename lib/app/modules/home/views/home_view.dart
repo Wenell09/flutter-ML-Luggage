@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ml_luggage/app/routes/app_pages.dart';
-
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:get/get.dart';
-
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -65,18 +64,26 @@ class HomeView extends GetView<HomeController> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 30),
-                        child: TextField(
-                          controller: controller.inputType[index],
-                          onChanged: (value) {
-                            controller.validasiTipeBarang(value, index);
-                          },
-                          keyboardType: TextInputType.name,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            label: Text("Input Type"),
-                            hintText: "Tipe Koper:(Backpack,Duffel,Suitcase)",
-                          ),
-                        ),
+                        child: DropdownSearch<String>(
+                            items: const ["Backpack", "Duffel", "Suitcase"],
+                            clearButtonProps: const ClearButtonProps(
+                              isVisible: true,
+                              icon: Icon(
+                                Icons.close,
+                                color: Colors.black,
+                              ),
+                            ),
+                            onChanged: (value) {
+                              controller.validasiTipeBarang(value!, index);
+                            },
+                            dropdownDecoratorProps:
+                                const DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                label: Text("Input Type"),
+                                hintText: "Masukkan Tipe Koper",
+                              ),
+                            )),
                       ),
                     ],
                   ),
@@ -89,7 +96,12 @@ class HomeView extends GetView<HomeController> {
                   controller.validasiDanInputBarang(i);
                 }
                 controller.predictWeight(controller.items);
-                Navigator.of(context).pushNamed(Routes.HASIL);
+                for (int i = 0; i < controller.numberOfItems.value; i++) {
+                  controller.resetInput(i);
+                }
+                (controller.goToResult.value)
+                    ? Navigator.of(context).pushNamed(Routes.HASIL)
+                    : null;
               },
               highlightColor: Colors.transparent,
               hoverColor: Colors.transparent,

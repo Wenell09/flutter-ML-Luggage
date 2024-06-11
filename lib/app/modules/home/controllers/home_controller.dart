@@ -7,15 +7,15 @@ class HomeController extends GetxController {
   var inputHeight = <TextEditingController>[].obs;
   var inputLength = <TextEditingController>[].obs;
   var inputWidth = <TextEditingController>[].obs;
-  var inputType = <TextEditingController>[].obs;
+  List<Map<String, dynamic>> items = [];
   var typeSuitcase = <RxInt>[].obs;
   var typeBackpack = <RxInt>[].obs;
   var typeDuffel = <RxInt>[].obs;
+  var goToResult = false.obs;
   var numberOfItems = 1.obs; // jumlah barang
   var isLoading = true.obs;
   var volume = 0.obs;
   var data = [].obs;
-  List<Map<String, dynamic>> items = [];
 
   Future<void> predictWeight(List<Map<String, dynamic>> items) async {
     final url = Uri.parse('http://127.0.0.1:5000/predict_weight');
@@ -33,13 +33,14 @@ class HomeController extends GetxController {
   }
 
   void validasiDanInputBarang(int i) {
-    if (inputLength[i].text.isEmpty &&
-        inputWidth[i].text.isEmpty &&
-        inputHeight[i].text.isEmpty &&
-        inputType[i].text.isEmpty) {
+    if (inputLength[i].text.isEmpty ||
+        inputWidth[i].text.isEmpty ||
+        inputHeight[i].text.isEmpty) {
       Get.snackbar("Error", "Semua field wajib diisi!");
+      goToResult.value = false;
     } else {
       inputBarang(i);
+      goToResult.value = true;
     }
   }
 
@@ -62,7 +63,6 @@ class HomeController extends GetxController {
     inputLength.add(TextEditingController());
     inputWidth.add(TextEditingController());
     inputHeight.add(TextEditingController());
-    inputType.add(TextEditingController());
     typeBackpack.add(0.obs);
     typeDuffel.add(0.obs);
     typeSuitcase.add(0.obs);
@@ -87,6 +87,14 @@ class HomeController extends GetxController {
       typeDuffel[index].value = 0;
       typeSuitcase[index].value = 0;
     }
+  }
+
+  void resetInput(int i) {
+    items.clear();
+    inputLength[i].clear();
+    inputWidth[i].clear();
+    inputHeight[i].clear();
+    numberOfItems.value = 1;
   }
 
   @override
