@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,43 +6,17 @@ class HomeController extends GetxController {
   var inputLength = <TextEditingController>[].obs;
   var inputWidth = <TextEditingController>[].obs;
   List<Map<String, dynamic>> items = [];
+  var isHiddenPredictButton = true.obs;
   var typeSuitcase = <RxInt>[].obs;
   var typeBackpack = <RxInt>[].obs;
   var typeDuffel = <RxInt>[].obs;
-  var goToResult = false.obs;
-  var numberOfItems = 1.obs; // jumlah barang
-  var isLoading = true.obs;
-  var volume = 0.obs;
-  var data = [].obs;
-
-  Future<void> predictWeight(List<Map<String, dynamic>> items) async {
-    final url = Uri.parse('http://127.0.0.1:5000/predict_weight');
-    final headers = {"Content-Type": "application/json"};
-    final body = jsonEncode(items);
-    final response = await http.post(url, headers: headers, body: body);
-    if (response.statusCode == 200) {
-      final result = jsonDecode(response.body);
-      debugPrint("Hasil : $result");
-      data.value = result;
-      isLoading.value = false;
-    } else {
-      debugPrint("Response : ${response.statusCode}");
-    }
-  }
-
-  void validasiDanInputBarang(int i) {
-    if (inputLength[i].text.isEmpty ||
-        inputWidth[i].text.isEmpty ||
-        inputHeight[i].text.isEmpty) {
-      Get.snackbar("Error", "Semua field wajib diisi!");
-      goToResult.value = false;
-    } else {
-      inputBarang(i);
-      goToResult.value = true;
-    }
-  }
+  var numberOfItems = 0.obs;
+  var volume = <RxInt>[];
 
   void inputBarang(int i) {
+    volume[i].value = int.parse(inputLength[i].text) *
+        int.parse(inputWidth[i].text) *
+        int.parse(inputHeight[i].text);
     items.add({
       'length': int.parse(inputLength[i].text),
       'width': int.parse(inputWidth[i].text),
@@ -52,21 +24,20 @@ class HomeController extends GetxController {
       'type_backpack': typeBackpack[i].value,
       'type_duffel': typeDuffel[i].value,
       'type_suitcase': typeSuitcase[i].value,
-      'volume': int.parse(inputLength[i].text) *
-          int.parse(inputWidth[i].text) *
-          int.parse(inputHeight[i].text),
+      'volume': volume[i].value,
     });
   }
 
   void penambahanBarang() {
-    numberOfItems.value++;
     inputLength.add(TextEditingController());
     inputWidth.add(TextEditingController());
     inputHeight.add(TextEditingController());
     typeBackpack.add(0.obs);
     typeDuffel.add(0.obs);
     typeSuitcase.add(0.obs);
-    numberOfItems.value = inputLength.length;
+    volume.add(0.obs);
+    isHiddenPredictButton.value = false;
+    numberOfItems.value++;
   }
 
   void validasiTipeBarang(String value, int index) {
@@ -89,17 +60,18 @@ class HomeController extends GetxController {
     }
   }
 
-  void resetInput(int i) {
+  void resetInput() {
+    for (int i = 0; i < inputLength.length; i++) {
+      inputLength[i].dispose();
+      inputWidth[i].dispose();
+      inputHeight[i].dispose();
+    }
     items.clear();
-    inputLength[i].clear();
-    inputWidth[i].clear();
-    inputHeight[i].clear();
-    numberOfItems.value = 1;
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
-    penambahanBarang();
+    volume.clear();
+    inputLength.clear();
+    inputWidth.clear();
+    inputHeight.clear();
+    numberOfItems.value = 0;
+    isHiddenPredictButton.value = true;
   }
 }

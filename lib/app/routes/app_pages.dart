@@ -1,9 +1,8 @@
 import 'package:get/get.dart';
-
-import '../modules/hasil/bindings/hasil_binding.dart';
-import '../modules/hasil/views/hasil_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/result/bindings/result_binding.dart';
+import '../modules/result/views/result_view.dart';
 
 // ignore_for_file: constant_identifier_names
 
@@ -21,9 +20,9 @@ class AppPages {
       binding: HomeBinding(),
     ),
     GetPage(
-      name: _Paths.HASIL,
-      page: () => const HasilView(),
-      binding: HasilBinding(),
+      name: _Paths.RESULT,
+      page: () => const ResultView(),
+      binding: ResultBinding(),
     ),
   ];
 }
