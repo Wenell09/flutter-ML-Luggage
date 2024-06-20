@@ -9,14 +9,22 @@ class ResultView extends GetView<ResultController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ResultView'),
+        title: const Text('Hasil Prediksi'),
+        backgroundColor: Colors.blue,
         centerTitle: true,
       ),
       body: ListView(
         children: [
           Obx(
             () => (controller.isLoading.value)
-                ? const Center(child: CircularProgressIndicator())
+                ? Container(
+                    alignment: Alignment.center,
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
                 : (controller.data[0]["status"] == "diterima")
                     ? Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -31,24 +39,60 @@ class ResultView extends GetView<ResultController> {
                             itemBuilder: (context, index) {
                               var data = controller.data[index];
                               var weights = data["weights"];
-                              return Column(
-                                children: [
-                                  Text(data["pesan"]),
-                                  const Text(
-                                      "Ketentuan limit barang koper : 200kg"),
-                                  Text(
-                                      "Total Berat Koper : ${data["total_weight"]}Kg"),
-                                  ...weights.map((weightData) {
-                                    return Text(
-                                        "Barang ${weightData['barang']} : ${weightData['weight']}Kg");
-                                  }),
-                                  ...List.generate(controller.volume.length,
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Information",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      "Status : ${data["pesan"]}",
+                                      style: const TextStyle(
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                    const Text(
+                                      "Ketentuan limit total berat : 200kg",
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                    Text(
+                                      "Total Berat Koper : ${data["total_weight"]}Kg",
+                                      style: const TextStyle(
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                    ...weights.map(
+                                      (weightData) {
+                                        return Text(
+                                          "Barang ${weightData['barang']} : ${weightData['weight']}Kg",
+                                          style: const TextStyle(
+                                            fontSize: 17,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    ...List.generate(
+                                      controller.volume.length,
                                       (index) {
-                                    var volume = controller.volume[index];
-                                    return Text(
-                                        "Nilai Volume ke ${index + 1}: $volume");
-                                  })
-                                ],
+                                        var volume = controller.volume[index];
+                                        return Text(
+                                          "Nilai Volume ${index + 1}: $volume",
+                                          style: const TextStyle(
+                                            fontSize: 17,
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  ],
+                                ),
                               );
                             },
                             itemCount: controller.data.length,
@@ -68,24 +112,61 @@ class ResultView extends GetView<ResultController> {
                               itemBuilder: (context, index) {
                                 var data = controller.data[index];
                                 var weights = data["weights"];
-                                return Column(
-                                  children: [
-                                    Text(data["pesan"]),
-                                    const Text(
-                                        "Ketentuan limit barang koper : 200kg"),
-                                    Text(
-                                        "Total Berat Koper : ${data["total_weight"]}Kg"),
-                                    ...weights.map((weightData) {
-                                      return Text(
-                                          "Barang ${weightData['barang']} : ${weightData['weight']}Kg");
-                                    }),
-                                    ...List.generate(controller.volume.length,
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Information",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "Status : ${data["pesan"]}",
+                                        style: const TextStyle(
+                                          fontSize: 17,
+                                        ),
+                                      ),
+                                      const Text(
+                                        "Ketentuan limit barang koper : 200kg",
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Total Berat Koper : ${data["total_weight"]}Kg",
+                                        style: const TextStyle(
+                                          fontSize: 17,
+                                        ),
+                                      ),
+                                      ...weights.map(
+                                        (weightData) {
+                                          return Text(
+                                            "Barang ${weightData['barang']} : ${weightData['weight']}Kg",
+                                            style: const TextStyle(
+                                              fontSize: 17,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      ...List.generate(
+                                        controller.volume.length,
                                         (index) {
-                                      var volume = controller.volume[index];
-                                      return Text(
-                                          "Nilai Volume ke ${index + 1}: $volume");
-                                    })
-                                  ],
+                                          var volume = controller.volume[index];
+                                          return Text(
+                                            "Nilai Volume ${index + 1}: $volume",
+                                            style: const TextStyle(
+                                              fontSize: 17,
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  ),
                                 );
                               },
                               itemCount: controller.data.length,

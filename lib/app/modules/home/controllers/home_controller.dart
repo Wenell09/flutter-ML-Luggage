@@ -7,6 +7,7 @@ class HomeController extends GetxController {
   var inputWidth = <TextEditingController>[].obs;
   List<Map<String, dynamic>> items = [];
   var isHiddenPredictButton = true.obs;
+  var key = GlobalKey<FormState>();
   var typeSuitcase = <RxInt>[].obs;
   var typeBackpack = <RxInt>[].obs;
   var typeDuffel = <RxInt>[].obs;

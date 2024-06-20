@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ml_luggage/app/data/base_url.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 
@@ -11,7 +12,7 @@ class ResultController extends GetxController {
   var isLoading = true.obs;
 
   Future<void> predictWeight(List<Map<String, dynamic>> items) async {
-    final url = Uri.parse('http://127.0.0.1:5000/predict_weight');
+    final url = Uri.parse('$baseUrl/predict_weight');
     final headers = {"Content-Type": "application/json"};
     final body = jsonEncode(items);
     final response = await http.post(url, headers: headers, body: body);
