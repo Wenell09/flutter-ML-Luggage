@@ -6,6 +6,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ResultController extends GetxController {
+  var totalVolume = Get.arguments["totalVolume"];
+  var typeLuggage = Get.arguments["typeLuggage"];
   var argument = Get.arguments["data"];
   var volume = Get.arguments["volume"];
   var data = <dynamic>[].obs;

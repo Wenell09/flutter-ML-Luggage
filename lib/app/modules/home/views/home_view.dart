@@ -141,6 +141,8 @@ class HomeView extends GetView<HomeController> {
                               .pushNamed(Routes.RESULT, arguments: {
                             "data": controller.items,
                             "volume": controller.volume,
+                            "totalVolume": controller.totalVolume.value,
+                            "typeLuggage": controller.typeLuggage,
                           });
                           Future.delayed(
                             const Duration(seconds: 2),

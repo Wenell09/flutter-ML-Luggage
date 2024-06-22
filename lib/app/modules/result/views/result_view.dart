@@ -43,16 +43,17 @@ class ResultView extends GetView<ResultController> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text(
-                                      "Information",
+                                      "Pesan Informasi",
                                       style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                     Text(
-                                      "Status : ${data["pesan"]}",
+                                      '"${data["pesan"]}"',
+                                      textAlign: TextAlign.center,
                                       style: const TextStyle(
                                         fontSize: 17,
                                       ),
@@ -63,40 +64,148 @@ class ResultView extends GetView<ResultController> {
                                         fontSize: 17,
                                       ),
                                     ),
-                                    Text(
-                                      "Total Berat Koper : ${data["total_weight"]}Kg",
-                                      style: const TextStyle(
-                                        fontSize: 17,
-                                      ),
+                                    const SizedBox(
+                                      height: 20,
                                     ),
-                                    ...weights.map(
-                                      (weightData) {
-                                        return Text(
-                                          "Barang ${weightData['barang']} : ${weightData['weight']}Kg",
-                                          style: const TextStyle(
-                                            fontSize: 17,
-                                          ),
-                                        );
-                                      },
+                                    const Text(
+                                      "Tabel Informasi",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                    ...List.generate(
-                                      controller.volume.length,
-                                      (index) {
-                                        var volume = controller.volume[index];
-                                        return Text(
-                                          "Nilai Volume ${index + 1}: $volume",
-                                          style: const TextStyle(
-                                            fontSize: 17,
-                                          ),
-                                        );
+                                    Table(
+                                      columnWidths: const <int,
+                                          TableColumnWidth>{
+                                        0: FixedColumnWidth(15),
+                                        1: FlexColumnWidth(1),
                                       },
+                                      border:
+                                          TableBorder.all(color: Colors.black),
+                                      children: [
+                                        TableRow(
+                                          decoration: BoxDecoration(
+                                              color: Colors.green[200]),
+                                          children: const [
+                                            Text(
+                                              "No",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                            Text(
+                                              "Tipe Koper",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                            Text(
+                                              "Volume",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                            Text(
+                                              "berat",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                            Text(
+                                              "Total Berat",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                            Text(
+                                              "Total Volume",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        // Baris data
+                                        ...List.generate(
+                                          weights.length,
+                                          (index) {
+                                            var weight = weights[index];
+                                            var typeLuggage =
+                                                controller.typeLuggage[index];
+                                            var volume =
+                                                controller.volume[index];
+                                            return TableRow(
+                                              children: [
+                                                Text(
+                                                  (index + 1).toString(),
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  typeLuggage.toString(),
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  volume.toString(),
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 1,
+                                                  weight['weight'].toString(),
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 1,
+                                                  index == 0
+                                                      ? data["total_weight"]
+                                                          .toString()
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                // Hanya tampilkan di baris kedua
+                                                Text(
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 1,
+                                                  index == 0
+                                                      ? controller.totalVolume
+                                                          .toString()
+                                                      : '',
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ],
                                     )
                                   ],
                                 ),
                               );
                             },
                             itemCount: controller.data.length,
-                          )
+                          ),
                         ],
                       )
                     : Center(
@@ -116,61 +225,169 @@ class ResultView extends GetView<ResultController> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
                                     children: [
                                       const Text(
-                                        "Information",
+                                        "Pesan Informasi",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        '"${data["pesan"]}"',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          fontSize: 17,
+                                        ),
+                                      ),
+                                      const Text(
+                                        "Ketentuan limit total berat : 200kg",
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      const Text(
+                                        "Tabel Informasi",
                                         style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      Text(
-                                        "Status : ${data["pesan"]}",
-                                        style: const TextStyle(
-                                          fontSize: 17,
-                                        ),
-                                      ),
-                                      const Text(
-                                        "Ketentuan limit barang koper : 200kg",
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                        ),
-                                      ),
-                                      Text(
-                                        "Total Berat Koper : ${data["total_weight"]}Kg",
-                                        style: const TextStyle(
-                                          fontSize: 17,
-                                        ),
-                                      ),
-                                      ...weights.map(
-                                        (weightData) {
-                                          return Text(
-                                            "Barang ${weightData['barang']} : ${weightData['weight']}Kg",
-                                            style: const TextStyle(
-                                              fontSize: 17,
-                                            ),
-                                          );
+                                      Table(
+                                        columnWidths: const <int,
+                                            TableColumnWidth>{
+                                          0: FixedColumnWidth(15),
+                                          1: FlexColumnWidth(1),
                                         },
-                                      ),
-                                      ...List.generate(
-                                        controller.volume.length,
-                                        (index) {
-                                          var volume = controller.volume[index];
-                                          return Text(
-                                            "Nilai Volume ${index + 1}: $volume",
-                                            style: const TextStyle(
-                                              fontSize: 17,
-                                            ),
-                                          );
-                                        },
+                                        border: TableBorder.all(
+                                            color: Colors.black),
+                                        children: [
+                                          TableRow(
+                                            decoration: BoxDecoration(
+                                                color: Colors.green[200]),
+                                            children: const [
+                                              Text(
+                                                "No",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              Text(
+                                                "Tipe Koper",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              Text(
+                                                "Volume",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              Text(
+                                                "berat",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              Text(
+                                                "Total Berat",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              Text(
+                                                "Total Volume",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          // Baris data
+                                          ...List.generate(
+                                            weights.length,
+                                            (index) {
+                                              var weight = weights[index];
+                                              var typeLuggage =
+                                                  controller.typeLuggage[index];
+                                              var volume =
+                                                  controller.volume[index];
+                                              return TableRow(
+                                                children: [
+                                                  Text(
+                                                    (index + 1).toString(),
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    typeLuggage.toString(),
+                                                    style: const TextStyle(
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    volume.toString(),
+                                                    style: const TextStyle(
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    weight['weight'].toString(),
+                                                    style: const TextStyle(
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    index == 0
+                                                        ? data["total_weight"]
+                                                            .toString()
+                                                        : '',
+                                                    style: const TextStyle(
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                  // Hanya tampilkan di baris kedua
+                                                  Text(
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    index == 0
+                                                        ? controller.totalVolume
+                                                            .toString()
+                                                        : '',
+                                                    style: const TextStyle(
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          ),
+                                        ],
                                       )
                                     ],
                                   ),
                                 );
                               },
                               itemCount: controller.data.length,
-                            )
+                            ),
                           ],
                         ),
                       ),
